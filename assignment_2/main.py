@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import cv2
+import numpy as np
 
 OUTPUT_DIR = Path(__file__).parent / "solutions"
 
@@ -37,6 +38,18 @@ def resize(image, width, height):
     return resized
 
 
+def copy(image, emptyPictureArray):
+    height, width, channels = image.shape
+
+    for y in range(height):
+        for x in range(width):
+            for c in range(channels):
+                emptyPictureArray[y, x, c] = image[y, x, c]
+
+    save_image(emptyPictureArray, "copy.png")
+    return emptyPictureArray
+
+
 def main():
     image_path = Path(__file__).parent / "iris-1.png"
     image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
@@ -44,11 +57,13 @@ def main():
         raise FileNotFoundError(f"Could not read image: {image_path}")
 
     height, width = image.shape[:2]
+    emptyPictureArray = np.zeros((height, width, 3), dtype=np.uint8)
 
     padding(image, 100)
     crop(image, 200, width - 130, 200, height - 130)
     resize(image, 200, 200)
-    
+    copy(image, emptyPictureArray)
+
 
 if __name__ == "__main__":
     main()
