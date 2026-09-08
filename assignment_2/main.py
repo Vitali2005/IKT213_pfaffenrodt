@@ -5,6 +5,12 @@ import numpy as np
 
 OUTPUT_DIR = Path(__file__).parent / "solutions"
 
+ROTATIONS = {
+    90: cv2.ROTATE_90_CLOCKWISE,
+    180: cv2.ROTATE_180,
+    270: cv2.ROTATE_90_COUNTERCLOCKWISE,
+}
+
 
 def save_image(image, filename):
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -76,9 +82,20 @@ def hue_shifted(image, emptyPictureArray, hue):
 
 
 def smoothing(image):
-    smoothed = cv2.GaussianBlur(image, (15, 15), 0, borderType=cv2.BORDER_DEFAULT)
+    smoothed = cv2.GaussianBlur(
+        image, (15, 15), 0, borderType=cv2.BORDER_DEFAULT
+    )
     save_image(smoothed, "smoothing.png")
     return smoothed
+
+
+def rotation(image, rotation_angle):
+    if rotation_angle not in ROTATIONS:
+        raise ValueError("Rotation angle must be 90, 180, or 270 degrees.")
+
+    rotated = cv2.rotate(image, ROTATIONS[rotation_angle])
+    save_image(rotated, "rotation.png")
+    return rotated
 
 
 def main():
@@ -98,6 +115,7 @@ def main():
     hsv(image)
     hue_shifted(image, emptyPictureArray, 50)
     smoothing(image)
+    rotation(image, 180)
 
 
 if __name__ == "__main__":
