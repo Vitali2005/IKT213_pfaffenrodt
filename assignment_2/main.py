@@ -75,6 +75,12 @@ def hue_shifted(image, emptyPictureArray, hue):
     return emptyPictureArray
 
 
+def smoothing(image):
+    smoothed = cv2.GaussianBlur(image, (15, 15), 0, borderType=cv2.BORDER_DEFAULT)
+    save_image(smoothed, "smoothing.png")
+    return smoothed
+
+
 def main():
     image_path = Path(__file__).parent / "iris-1.png"
     image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
@@ -91,6 +97,7 @@ def main():
     grayscale(image)
     hsv(image)
     hue_shifted(image, emptyPictureArray, 50)
+    smoothing(image)
 
 
 if __name__ == "__main__":
