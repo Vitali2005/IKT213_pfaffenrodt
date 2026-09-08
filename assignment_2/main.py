@@ -25,13 +25,22 @@ def padding(image, border_width):
     return padded
 
 
+def crop(image, x_0, x_1, y_0, y_1):
+    cropped = image[y_0:y_1, x_0:x_1]
+    save_image(cropped, "crop.png")
+    return cropped
+
+
 def main():
     image_path = Path(__file__).parent / "iris-1.png"
     image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
     if image is None:
         raise FileNotFoundError(f"Could not read image: {image_path}")
 
+    height, width = image.shape[:2]
+
     padding(image, 100)
+    crop(image, 200, width - 130, 200, height - 130)
 
 
 if __name__ == "__main__":
