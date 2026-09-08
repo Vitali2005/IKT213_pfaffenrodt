@@ -62,6 +62,19 @@ def hsv(image):
     return hsv_image
 
 
+def hue_shifted(image, emptyPictureArray, hue):
+    height, width, channels = image.shape
+
+    for y in range(height):
+        for x in range(width):
+            for c in range(channels):
+                shifted = int(image[y, x, c]) + hue
+                emptyPictureArray[y, x, c] = min(max(shifted, 0), 255)
+
+    save_image(emptyPictureArray, "hue_shifted.png")
+    return emptyPictureArray
+
+
 def main():
     image_path = Path(__file__).parent / "iris-1.png"
     image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
@@ -77,6 +90,7 @@ def main():
     copy(image, emptyPictureArray)
     grayscale(image)
     hsv(image)
+    hue_shifted(image, emptyPictureArray, 50)
 
 
 if __name__ == "__main__":
