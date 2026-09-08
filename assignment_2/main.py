@@ -31,6 +31,12 @@ def crop(image, x_0, x_1, y_0, y_1):
     return cropped
 
 
+def resize(image, width, height):
+    resized = cv2.resize(image, (width, height))
+    save_image(resized, "resize.png")
+    return resized
+
+
 def main():
     image_path = Path(__file__).parent / "iris-1.png"
     image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
@@ -41,7 +47,8 @@ def main():
 
     padding(image, 100)
     crop(image, 200, width - 130, 200, height - 130)
-
+    resize(image, 200, 200)
+    
 
 if __name__ == "__main__":
     main()
