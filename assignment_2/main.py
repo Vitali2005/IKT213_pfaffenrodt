@@ -56,6 +56,12 @@ def grayscale(image):
     return gray_image
 
 
+def hsv(image):
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    save_image(hsv_image, "hsv.png")
+    return hsv_image
+
+
 def main():
     image_path = Path(__file__).parent / "iris-1.png"
     image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
@@ -70,7 +76,8 @@ def main():
     resize(image, 200, 200)
     copy(image, emptyPictureArray)
     grayscale(image)
-    
+    hsv(image)
+
 
 if __name__ == "__main__":
     main()
