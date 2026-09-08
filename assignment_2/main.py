@@ -50,6 +50,12 @@ def copy(image, emptyPictureArray):
     return emptyPictureArray
 
 
+def grayscale(image):
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    save_image(gray_image, "grayscale.png")
+    return gray_image
+
+
 def main():
     image_path = Path(__file__).parent / "iris-1.png"
     image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
@@ -63,7 +69,8 @@ def main():
     crop(image, 200, width - 130, 200, height - 130)
     resize(image, 200, 200)
     copy(image, emptyPictureArray)
-
+    grayscale(image)
+    
 
 if __name__ == "__main__":
     main()
