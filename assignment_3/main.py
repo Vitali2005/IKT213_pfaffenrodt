@@ -1,7 +1,17 @@
 from pathlib import Path
+
 import cv2
+import numpy as np
 
 OUTPUT_DIR = Path(__file__).parent / "solutions"
+
+
+def load_image(image_name):
+    image_path = Path(__file__).parent / image_name
+    image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
+    if image is None:
+        raise FileNotFoundError(f"Could not read image: {image_path}")
+    return image
 
 
 def save_image(image, filename):
@@ -31,9 +41,10 @@ def sobel_edge_detection(image):
     cv2.waitKey(0)
     cv2.imshow('Sobel gradient magnitude', sobel_edges_magnitude)
     cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    
     cv2.imshow('Sobel mixed derivative', sobel_edges_mixed_derivative)
     cv2.waitKey(0)
-
     cv2.destroyAllWindows()
 
     save_image(sobel_edges_magnitude, "sobel_edges_magnitude.png")
@@ -48,20 +59,38 @@ def canny_edge_detection(image, threshold_1, threshold_2):
 
     cv2.imshow("Canny Edge Detection", canny_edges)
     cv2.waitKey(0)
-
     cv2.destroyAllWindows()
 
     save_image(canny_edges, "canny_edges.png")
 
 
-def main():
-    image_path = Path(__file__).parent / "lambo.png"
-    image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
-    if image is None:
-        raise FileNotFoundError(f"Could not read image: {image_path}")
+def template_match(image, template):
+    grayscale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    grayscale_template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
 
-    sobel_edge_detection(image)
-    canny_edge_detection(image, 50, 50)
+    w, h = grayscale_template.shape[::-1]
+    result = cv2.matchTemplate(grayscale_image, grayscale_template, cv2.TM_CCOEFF_NORMED)
+    threshold = 0.9
+    location = np.where(result >= threshold)
+
+    for pt in zip(*location[::-1]):
+        cv2.rectangle(image, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2)
+
+    cv2.imshow("Template Matching", image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+    save_image(image, "template_matching.png")
+
+
+def main():
+    lambo_image = load_image("lambo.png")
+    shapes_image = load_image("shapes-1.png")
+    template = load_image("shapes_template.jpg")
+
+    sobel_edge_detection(lambo_image)
+    canny_edge_detection(lambo_image, 50, 50)
+    template_match(shapes_image, template)
 
 
 if __name__ == "__main__":
