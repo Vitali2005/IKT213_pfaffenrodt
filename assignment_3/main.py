@@ -114,6 +114,7 @@ def main():
     canny_edge_detection(lambo_image, 50, 50)
     template_match(shapes_image, template)
     resize(lambo_image, 2, "up")
+    resize(lambo_image, 2, "down")
 
 
 if __name__ == "__main__":
