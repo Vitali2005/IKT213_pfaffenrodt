@@ -25,29 +25,30 @@ def sobel_edge_detection(image):
     grayscale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurred_image = cv2.GaussianBlur(grayscale_image, (3, 3), 0)
 
-    # Sobel edges with x and y derivatives and magnitude
+    # Sobel using separate x/y derivatives and gradient magnitude
     sobel_x = cv2.Sobel(src=blurred_image, ddepth=cv2.CV_32F, dx=1, dy=0, ksize=1)
     sobel_y = cv2.Sobel(src=blurred_image, ddepth=cv2.CV_32F, dx=0, dy=1, ksize=1)
     sobel_magnitude = cv2.magnitude(sobel_x, sobel_y)
     sobel_edges_magnitude = cv2.normalize(sobel_magnitude, None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
 
-    # Sobel edges with mixed derivative
-    sobel_mixed_derivative = cv2.Sobel(src=blurred_image, ddepth=cv2.CV_32F, dx=1, dy=1, ksize=1)
-    sobel_edges_mixed_derivative = cv2.normalize(sobel_mixed_derivative, None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
-
     cv2.imshow("Sobel X", sobel_x)
-    cv2.waitKey( 0)
+    cv2.waitKey(0)
     cv2.imshow("Sobel Y", sobel_y)
     cv2.waitKey(0)
     cv2.imshow('Sobel gradient magnitude', sobel_edges_magnitude)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+    save_image(sobel_edges_magnitude, "sobel_edges_magnitude.png")
+
+    # Sobel using the mixed x/y derivative
+    sobel_mixed_derivative = cv2.Sobel(src=blurred_image, ddepth=cv2.CV_32F, dx=1, dy=1, ksize=1)
+    sobel_edges_mixed_derivative = cv2.normalize(sobel_mixed_derivative, None, 0, 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
     
     cv2.imshow('Sobel mixed derivative', sobel_edges_mixed_derivative)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-    save_image(sobel_edges_magnitude, "sobel_edges_magnitude.png")
     save_image(sobel_edges_mixed_derivative, "sobel_edges_mixed_derivative.png")
 
 
