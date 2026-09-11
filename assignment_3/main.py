@@ -84,7 +84,7 @@ def template_match(image, template):
     save_image(image, "template_matching.png")
 
 
-def resize(image, scale_factor:int, up_or_down: str):
+def resize(image, scale_factor: int, up_or_down: str):
     if up_or_down == "up":
         new_width = int(image.shape[1] * scale_factor)
         new_height = int(image.shape[0] * scale_factor)
