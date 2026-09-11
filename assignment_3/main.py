@@ -84,6 +84,27 @@ def template_match(image, template):
     save_image(image, "template_matching.png")
 
 
+def resize(image, scale_factor:int, up_or_down: str):
+    if up_or_down == "up":
+        new_width = int(image.shape[1] * scale_factor)
+        new_height = int(image.shape[0] * scale_factor)
+        resized = cv2.pyrUp(image, dstsize=(new_width, new_height))
+
+    elif up_or_down == "down":
+        new_width = int(image.shape[1] / scale_factor)
+        new_height = int(image.shape[0] / scale_factor)
+        resized = cv2.pyrDown(image, dstsize=(new_width, new_height))
+
+    else:
+        raise ValueError("up_or_down must be 'up' or 'down'")
+
+    cv2.imshow("Resized Image", resized)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+    save_image(resized, f"resized_{up_or_down}.png")
+
+
 def main():
     lambo_image = load_image("lambo.png")
     shapes_image = load_image("shapes-1.png")
@@ -92,6 +113,7 @@ def main():
     sobel_edge_detection(lambo_image)
     canny_edge_detection(lambo_image, 50, 50)
     template_match(shapes_image, template)
+    resize(lambo_image, 2, "up")
 
 
 if __name__ == "__main__":
