@@ -38,7 +38,7 @@ def harris_corner_detection(image):
 
 
 def feature_based_image_alignment(image_to_align, reference_image, max_features, good_match_percent):
-    # Using SIFT
+    # Using SIFT with FLANN
     img1 = cv2.cvtColor(image_to_align, cv2.COLOR_BGR2GRAY)
     img2 = cv2.cvtColor(reference_image, cv2.COLOR_BGR2GRAY)
 
